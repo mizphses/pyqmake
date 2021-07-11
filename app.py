@@ -4,6 +4,7 @@ from os.path import dirname, join
 from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, request
 from flask_jwt import JWT, current_identity, jwt_required
+import re
 
 # Modules
 from auth import *
@@ -19,9 +20,18 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 # Auth
+class User(object):
+    def __init__(self, id, username, password, namae):
+        self.id = id
+        self.username = username
+        self.password = password
+        self.namae = namae
+
+    def __str__(self):
+        return "%s" % self.id
 jwt = JWT(app, authenticate, identity)
 
-# root, プレイエリア外
+# root, テストなど
 @app.route("/test")
 def testroute():
     print(user_fetch())
@@ -30,8 +40,6 @@ def testroute():
 @app.route("/")
 def root():
     return jsonify({"status":"403 Forbidden", "message":"メッセージはでないはずだよ"}), 403
-
-
 
 # # ユーザ登録
 @app.route("/register_user", methods=["post"])
@@ -48,19 +56,28 @@ def post_user():
 
 # # ユーザ更新
 @app.route("/alter_user", methods=["put"])
+@jwt_required()
 def alter_user():
     username = request.json['username']
     useremail = request.json['useremail']
     password = request.json['userpw']
     namae = request.json['namae']
     password_hash = generate_password_hash(password, method='sha256')
+    # 本人情報の取得
     with conn.cursor() as cur:
-        cur.execute('UPDATE users SET username=%s, useremail=%s, password_digest=%s, namae=%s WHERE username = %s', (username, useremail, password_hash, namae, username))
-    conn.commit()
-    return jsonify({"message":"200 OK"}), 200
-
-
-
+        cur.execute('SELECT id FROM users WHERE username = %s;', (username,))
+        registeredid = cur.fetchall()
+    # 本人情報の確認
+    if str(current_identity) == str(re.sub("\(|\,|\)", "", str(registeredid[0]))):
+        with conn.cursor() as cur:
+            cur.execute('UPDATE users SET username=%s, useremail=%s, password_digest=%s, namae=%s WHERE username = %s', (username, useremail, password_hash, namae, username))
+        conn.commit()
+        return jsonify({"message":"200 OK"}), 200
+    else:
+        return jsonify(
+            {
+                "message": "Forbidden"
+            }), 403
 
 # # エラーハンドリング
 @app.route("/500")
@@ -70,11 +87,7 @@ def hello():
 @app.route("/418")
 def index():
     return jsonify(
-        {
-            "Status": "Error",
-            "Code": 418,
-            "Message": "The requested entity body is short and stout. Tip me over and pour me out."
-        }), 418
+        {"Message": "I'm a teapot"}), 418
 
 @app.errorhandler(500)
 def error_500(e):
