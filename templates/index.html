@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='{{ url_for('static', filename='style.css') }}'>
+  </head>
+  <body>
+    <section class="cover">
+      {% if type == "ja" %}
+        <img src='{{ url_for('static', filename='name_ja.svg') }}' width='250px' height="100px">
+      {% elif type == "jb" %}
+        <img src='{{ url_for('static', filename='name_jb.svg') }}' width='250px' height="100px">
+      {% elif type == "eb" %}
+        <img src='{{ url_for('static', filename='name_eb.svg') }}' width='250px' height="100px">
+      {% else %}
+        <div style="height: 80px"></div>
+      {% endif %}
+      <p><small>問題管理番号：{{random}}</small></p>
+      <p class="center">{{ examtitle }}</p>
+      <h1 class="center is-title">{{ heading }}</h1>
+      <p class="center">問題冊子</p>
+      <p>
+        注意事項
+        {% if caution == "inherit" %}
+          <ol>
+            <li>試験開始の合図があるまで、この冊子を開いてはいけません。</li>
+            <li>問題冊子の落丁、乱丁または印刷不鮮明の箇所があったら、手をあげて監督者に知らせなさい。</li>
+            <li>答案には、必ず黒色の鉛筆、もしくは黒色のシャープペンシルを使用しなさい。</li>
+            <li>答案用紙の指定欄に、受験番号と氏名を記入しなさい。</li>
+            <li>答案は、必ず答案用紙の指定された箇所に記入しなさい。</li>
+            <li>答案は、1行の枠内に2行以上書いてはいけません。</li>
+            <li>答案用紙の答案記入欄に、関係の無い文字、記号、符号などを記入してはいけません。また、答案用紙の欄外の余白には、何も書いてはいけません。</li>
+            <li>記述問題の答案は特に指定が無い場合、大問の表題を記述している言語で作成しなさい。</li>
+            <li>この問題用紙の余白は、草稿用に用いてもよいが、どのページも切り離してはいけません。</li>
+            <li>答案用紙は、持ち帰ってはいけません。</li>
+            <li>答案は採点時にコピー機やスキャナを用いて複製をする場合があります。</li>
+            <li>返却後の答案の改ざんを含む不正行為および不正行為と疑わしい行為は禁止する。これらの行為を行ったことが発覚した場合、答案を無効とし、本試験の成績を0点とする場合がある。</li>
+            <li>試験終了後、問題冊子は持ち帰りなさい。</li>
+            <li>その他本注意事項や教室掲示の「定期試験等受験上の注意事項」を参照した上で不明点がある場合や、試験問題の配付後から答案回収が終了するまでに落とし物をした場合は静かに手をあげて試験監督者に知らせなさい。
+          </ol>
+        {% else %}
+          {% autoescape False %}
+            <div>{{ caution }}</div>
+          {% endautoescape %}
+        {% endif %}
+      </p>
+    </section>
+    {% for i in hani %}
+      <h2>問題{{ i + 1 }}　<span class='setumon'>{{ quizs[i][2] }}</span><span class='BankID'>[{{ questions[i] }}]</span></h2>
+      <section class="question">
+        {% autoescape False %}
+          {{ quizs[i][3] }}
+        {% endautoescape %}
+      </section>
+      <div class="aida"></div>
+    {% endfor %}
+  </body>
+</html>
+
+

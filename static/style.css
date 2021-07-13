@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;500;700&display=swap');
+
+body{
+  font-family: "Times", "Shippori Mincho", "MS Mincho", "Yu Mincho", "YuMincho" ,"Noto Serif JP", serif;
+  font-weight: 400;
+  line-height: 2em;
+  counter-reset: page-number;
+  font-size: 10.5pt;
+}
+@page{
+  size: 182mm 257mm;
+  margin: 0.7in;
+}
+b, h1, h2, h3, h4, h5, h6 {
+  font-family: Arial, "Noto Sans JP", "Hiragino Sans", "MS Gothic", sans-serif;
+  font-size: 1.2em;
+  font-weight: 400;
+}
+.BankID{
+  font-size: 0.3em;
+}
+table{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.answer{
+  color: white;
+  height: 1.5em;
+  font-size: 1.5em;
+}
+.qnumber{
+  width: 3em;
+}
+.answer.select{
+  min-width: 2em;
+}
+.title{
+  font-size: 2em;
+}
+.cover{
+  page-break-after: always;
+  line-height: 1.5em;
+}
+.aida{
+  height: 3em;
+}
+.center{
+  text-align: center;
+  line-height: 10pt;
+}
+.is-title{
+  font-size: 1.5em;
+}
+.setumon{
+  font-size: 10.5pt;
+}

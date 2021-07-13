@@ -1,5 +1,5 @@
 from connection import *
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 class User(object):
     def __init__(self, id, username, password, namae):
         self.id = id
@@ -8,7 +8,7 @@ class User(object):
         self.namae = namae
 
     def __str__(self):
-        return "%s" % self.id
+        return ["%s","%s","%s"] % (self.id, self.username, self.namae)
 
 def user_fetch():
     cur.execute('SELECT id, username, useremail, namae, password_digest FROM users;')
